@@ -2,6 +2,7 @@
 *.sqlite
 .DS_Store
 .coverage
+./idea
 env
 venv
 migrations

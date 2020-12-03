@@ -9,12 +9,16 @@ Goal: simple to install / configure / use.  No DB or media required.
 
 1. create Python app, say named `pwdch` (https://help.opalstack.com/article/60/pythonuwsgi-applications)
 ```sh
-$ svn export https://github.com/powderflask/opalstack-pwdch/opalstack-pwdch.git/trunk ~/apps/pwdch/sr
+$ svn export https://github.com/powderflask/opalstack-pwdch.git/trunk ~/apps/pwdch/src
+or
+$ git clone https://github.com/powderflask/opalstack-pwdch.git ~/apps/pwdch/src
+
+$ source ~/apps/pwdch/env/bin/activate
 $ pip install -r ~/apps/pwdch/src/requirements.txt
 $ ln -s ~/apps/pwdch/src/project ~/apps/pwdch
 ```
 
-2. edit `~/apps/pwdch/uwsgi.py`  (https://help.opalstack.com/article/60/pythonuwsgi-applications)
+2. edit `~/apps/pwdch/uwsgi.ini`  (https://help.opalstack.com/article/60/pythonuwsgi-applications)
 ```sh
 pythonpath = /home/<you>/apps/pwdch
 module = project:app
