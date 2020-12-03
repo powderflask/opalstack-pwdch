@@ -7,7 +7,7 @@
 
 from flask import render_template, Blueprint, url_for, redirect, flash, request
 
-from project import app
+from project import app, opalstack
 from project.email import send_email
 from project.token import generate_confirmation_token, confirm_token
 from .forms import RequestForm, PasswordResetForm
@@ -49,25 +49,24 @@ def home():
 def reset_password(token):
 
     mailbox = confirm_token(token)
+    os_mailuser = opalstack.get_mailuser(mailbox) if mailbox else None
 
-    if mailbox is not None:
-        form = PasswordResetForm(request.form)
-        if form.validate_on_submit():
-            # TODO: API call to change password to form.password.data
-            success = True
-            if success:
-                flash('Password successfully changed.', 'success')
-                return redirect(url_for('main.reset_password_success'))
-            else:
-                flash('Password change was unsuccessful.', 'danger')
-                return render_template('main/reset_passwod.html', form=form)
+    if not mailbox or os_mailuser is None:
+        flash('Invalid token. Possibly expired.  Request a new password-reset token.', 'danger')
+        return redirect(url_for('main.home'))
+
+    form = PasswordResetForm(request.form)
+    if form.validate_on_submit():
+        success = opalstack.change_password(os_mailuser, form.password.data)
+        if success:
+            flash('Password successfully changed.', 'success')
+            return redirect(url_for('main.reset_password_success'))
         else:
-            flash('You can now change your password.', 'success')
-            return render_template('main/reset_passwod.html', form=form)
+            flash('Password change was unsuccessful. Probably invaild. Try again.', 'danger')
     else:
-        flash('Can not reset the password, try again.', 'danger')
+        flash('You can now change your password.', 'success')
 
-    return redirect(url_for('main.home'))
+    return render_template('main/reset_passwod.html', form=form)
 
 
 @main_blueprint.route('/reset-success/')

@@ -9,10 +9,7 @@ Goal: simple to install / configure / use.  No DB or media required.
 
 1. create Python app, say named `pwdch` (https://help.opalstack.com/article/60/pythonuwsgi-applications)
 ```sh
-$ svn export https://github.com/powderflask/opalstack-pwdch.git/trunk ~/apps/pwdch/src
-or
 $ git clone https://github.com/powderflask/opalstack-pwdch.git ~/apps/pwdch/src
-
 $ source ~/apps/pwdch/env/bin/activate
 $ pip install -r ~/apps/pwdch/src/requirements.txt
 ```
@@ -68,19 +65,21 @@ $ export APP_MAIL_PASSWORD=ADDYOUROWN
 $ export APP_OPALSTACK_API_TOKEN=YOURAPITOKEN
 ```
 
+## Misc
+
 ### Clean environment
 
 ```sh
 sh clean.sh
 ```
 
-### Run
+### Run dev server
 
 ```sh
-$ python manage.py runserver
+$ flask run
 ```
 
-### Testing
+### Tests  ** NEED TO BE MOCKED **
 
 Without coverage:
 
@@ -94,7 +93,30 @@ With coverage:
 $ python manage.py cov
 ```
 
-### Credits
+## How does it work?
+
+1. User enters their email and mailbox username
+    - app verifies both are valid on your Opalstack account 
+        - and that the mailbox is set as a destination for the email address (verify email and mailuser are linked)
+    - app encrypts the mailbox name in a time-stamped token and emails a link containing token to user
+2. User receives link by email and clicks link, thus returning the token to the app.
+    - app decodes token to get mailuser, verifying token was returned before it expires
+3. User enters and confirms password
+    - app attempts to update password at Opalstack (assumes password is too simple if attempt fails)
+    - if successful, user is directed to verify their new password by logging in to webmail.opalstack.com
+    
+### Caveats
+
+Since this tool never verifies the end-user had the original mailbox password, there may be edge cases where a user
+is able to change the password for a mailbox they did not previously have the password for.
+
+For example, the approach used here makes a big assumption that a user who controls an email also 
+controls any mailbox that email is a destination for.
+    - While this is often true, in cases where multiple mailboxes or a mailbox and forwarders are configured on a 
+     single email, it is possible some recipients who should not have control over the mailbox will recieve
+     the password reset link.
+
+## Credits
 
 Based on an old tutorial at RealPython.com:  https://realpython.com/handling-email-confirmation-in-flask/
 
