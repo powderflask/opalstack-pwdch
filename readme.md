@@ -15,14 +15,13 @@ $ git clone https://github.com/powderflask/opalstack-pwdch.git ~/apps/pwdch/src
 
 $ source ~/apps/pwdch/env/bin/activate
 $ pip install -r ~/apps/pwdch/src/requirements.txt
-$ ln -s ~/apps/pwdch/src/project ~/apps/pwdch
 ```
 
 2. edit `~/apps/pwdch/uwsgi.ini`  (https://help.opalstack.com/article/60/pythonuwsgi-applications)
 ```sh
-pythonpath = /home/<you>/apps/pwdch
+pythonpath = /home/<you>/apps/pwdch/src
 module = project:app
-touch-reload = /home/<you>/apps/pwdch/project/__init__.py
+touch-reload = /home/<you>/apps/pwdch/src/project/__init__.py
 
 env = FLASK_APP=project
 env = APP_SETTINGS=project.config.ProductionConfig
