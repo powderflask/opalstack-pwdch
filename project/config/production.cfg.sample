@@ -1,0 +1,28 @@
+# This is a sample config file.
+# Create from this template a config named:
+#   production.cfg
+#
+# for your production settings.
+#
+# You don't need quotes for strings.
+# Lines starting with # are comments and are ignored
+
+[keys]
+SECRET_KEY = my_precious
+SECURITY_PASSWORD_SALT = my_precious_two
+
+[mail]
+MAIL_SERVER = smtp.de.opalstack.com
+MAIL_PORT = 587
+MAIL_USE_TLS = True
+MAIL_USE_SSL = False
+
+# mail authentication
+MAIL_USERNAME = your_opalstack_mailbox_name
+MAIL_PASSWORD = your-opalstack-email-password
+
+# mail sender
+MAIL_DEFAULT_SENDER = notifier@example.org
+
+[opalstack]
+OPALSTACK_API_TOKEN = your_opalstack_api_token

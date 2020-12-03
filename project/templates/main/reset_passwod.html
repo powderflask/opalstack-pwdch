@@ -1,0 +1,40 @@
+{% extends "_base.html" %}
+
+{% block content %}
+
+<h1>Reset your Opalstack Email Password</h1>
+<br />
+<form class="form-signin" role="form" method="post" action="">
+  {{ form.csrf_token }}
+  <p>
+  {{ form.password(placeholder="password") }}
+    <span class="error">
+      {% if form.password.errors %}
+        {% for error in form.password.errors %}
+          {{ error }}
+        {% endfor %}
+      {% endif %}
+    </span>
+  </p>
+  <p>
+  {{ form.confirm(placeholder="confirm") }}
+    <span class="error">
+      {% if form.confirm.errors %}
+        {% for error in form.confirm.errors %}
+          {{ error }}
+        {% endfor %}
+      {% endif %}
+    </span>
+  </p>
+  <button class="btn btn-success" type="submit">Reset your password!</button>
+  <br /><br />
+</form>
+
+    <p>The new password for your Opalstack email account <em>must</em>:</p>
+    <ul>
+    <li>be at least 12 characters long (16 or more is better)</li>
+    <li>contain at least one Upper-case, one lower-case, one numeric, and one symbol</li>
+    </ul>
+    (those rules are imposed by our host to ensure our email system remains secure)</p>
+
+{% endblock %}
